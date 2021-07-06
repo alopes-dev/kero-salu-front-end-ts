@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-select-container {
+  margin-top: 6px !important;
+}
+.bg-indigo-500 {
+  background-color: #0d1146 !important;
+}
+
+.bg-indigo-600 {
+  background-color: #0d1146;
+}
+.bg-indigo-600:hover {
+  opacity: 0.9 !important;
+}
+
+.text-indigo-600 {
+  color: #0d1146;
+}
+
+.text-indigo-600:hover {
+  opacity: 0.9 !important;
+}
+
+.focus.border-indigo-500:focus,
+.focus.ring-indigo-500:focus {
+  border-color: #0d1146 !important;
+  background-color: red;
+}
+
+.custom-css {
+  height: 115px;
+}
