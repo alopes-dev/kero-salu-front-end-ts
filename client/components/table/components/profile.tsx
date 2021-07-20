@@ -2,7 +2,6 @@ import React from 'react'
 import { ProfileProps } from '../table.types'
 
 const Profile: React.FC<ProfileProps> = ({ name, image, info, ...rest }) => {
-  console.log(name)
   return (
     <div className="flex items-center">
       <div className="flex-shrink-0 h-10 w-10">

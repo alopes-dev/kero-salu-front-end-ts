@@ -2,11 +2,6 @@ import useIsMounted from '@client/hooks/use-is-mounted'
 import DeleteModal from '@components/modal/delete-modal'
 import { ROUTES } from '@constants/routes'
 import {
-  TextField,
-  SelectField,
-  SelectFieldSelectable
-} from '@components/fields'
-import {
   PaperClipIcon,
   CurrencyPoundIcon,
   MailOpenIcon,
@@ -18,13 +13,27 @@ import {
   PencilIcon
 } from '@heroicons/react/outline'
 import { IVacanciesAttributes, ResponseInner, Select } from '@itypes/index'
-import { deleteVacances } from '@services/vacancies'
+import { deleteVacances, updateVacancies } from '@services/vacancies'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FC } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import EditFlexible from '@components/edit-flexible'
+import { transfSelect } from '../../../../../../../utils'
+import { getFunctionType } from '@services/function-type'
+import { getJobsType } from '@services/jobs-type'
+import { getProvinces } from '@services/provinces'
+import { getFormationType } from '@services/formation-type'
+import { ProfissionalExperiences } from '@constants/index'
+import { getCompetence } from '@services/competence'
+import { getLanguage } from '@services/language'
+import { getNationality } from '@services/nationalities'
+import { getBenefits } from '@services/benefits'
+import { postVacancies } from '@services/vacancies'
+import { IVacanciesData } from '@services/vacancies/types'
+import { getOffices } from '@services/office'
+import { getArea } from '@services/area'
 
 type VacanciesDetailProps = {
   vacancie: IVacanciesAttributes
@@ -61,7 +70,17 @@ const experienceSelected = (experience: string): Array<Select> => {
 const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { back, push } = useRouter()
-  const { register, handleSubmit, control, reset } = useForm()
+  const [areas, setAreas] = useState<ReadonlyArray<Select>>()
+  const [functionTypes, setFunctionTypes] = useState<ReadonlyArray<Select>>()
+  const [jobsTypes, setJobsType] = useState<ReadonlyArray<Select>>()
+  const [provinces, setProvinces] = useState<ReadonlyArray<Select>>()
+  const [formations, setFormations] = useState<ReadonlyArray<Select>>()
+  const [competences, setCompetences] = useState<ReadonlyArray<Select>>()
+  const [languages, setLanguages] = useState<ReadonlyArray<Select>>()
+  const [nationalities, setNationalities] = useState<ReadonlyArray<Select>>()
+  const [benefits, setBenefits] = useState<ReadonlyArray<Select>>()
+  const [offices, setOffices] = useState<ReadonlyArray<Select>>()
+  const { control } = useForm()
 
   const isMounted = useIsMounted()
 
@@ -90,9 +109,97 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
     }, 3000)
   }
 
+  const fetchArea = useCallback(async () => {
+    try {
+      const res = await getArea()
+      if (isMounted.current) setAreas(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchFunctionType = useCallback(async () => {
+    try {
+      const res = await getFunctionType()
+      if (isMounted.current) setFunctionTypes(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchJobsType = useCallback(async () => {
+    try {
+      const res = await getJobsType()
+      if (isMounted.current) setJobsType(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchProvinces = useCallback(async () => {
+    try {
+      const res = await getProvinces()
+      if (isMounted.current) setProvinces(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchFormationType = useCallback(async () => {
+    try {
+      const res = await getFormationType()
+      if (isMounted.current) setFormations(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchCompetence = useCallback(async () => {
+    try {
+      const res = await getCompetence()
+      if (isMounted.current) setCompetences(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchLanguage = useCallback(async () => {
+    try {
+      const res = await getLanguage()
+      if (isMounted.current) setLanguages(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchNationality = useCallback(async () => {
+    try {
+      const res = await getNationality()
+      if (isMounted.current) setNationalities(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchBenefits = useCallback(async () => {
+    try {
+      const res = await getBenefits()
+      if (isMounted.current) setBenefits(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  const fetchOffices = useCallback(async () => {
+    try {
+      const res = await getOffices()
+      if (isMounted.current) setOffices(transfSelect(res.data))
+    } catch (error) {}
+  }, [])
+
+  useEffect(() => {
+    fetchArea()
+    fetchFunctionType()
+    fetchJobsType()
+  }, [fetchArea, fetchFunctionType, fetchJobsType])
+
+  useEffect(() => {
+    fetchProvinces()
+    fetchCompetence()
+    fetchFormationType()
+  }, [fetchProvinces, fetchFormationType, fetchCompetence])
+
+  useEffect(() => {
+    fetchLanguage()
+    fetchNationality()
+    fetchBenefits()
+    fetchOffices()
+  }, [fetchLanguage, fetchNationality, fetchBenefits, fetchOffices])
+
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-      <Toaster />
       <DeleteModal
         title="Deseja eliminar essa vaga?"
         isOpen={isOpen}
@@ -144,13 +251,14 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
               {vacancie?.functionType?.designation}
               <EditFlexible
                 fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
+                id="functionTypeId"
+                type="select"
                 required
                 name="functionTypeId"
-                defaultValue={defaultSelect([vacancie?.functionType])}
                 control={control}
+                options={functionTypes}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
               />
             </dd>
           </div>
@@ -163,12 +271,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
 
               <EditFlexible
                 fieldType="select"
-                id="unique"
+                id="jobsTypeId"
                 type={'select'}
-                options={[]}
+                options={jobsTypes}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
                 required
                 name="jobsTypeId"
-                defaultValue={defaultSelect([vacancie?.job])}
                 control={control}
               />
             </dd>
@@ -183,16 +292,6 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
             </dt>
             <dd className="mt-1 flex justify-between text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {vacancie?.user?.email}
-              <EditFlexible
-                fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
-                required
-                name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
-                control={control}
-              />
             </dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -209,13 +308,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
                 currency: 'AOA'
               }).format(vacancie?.salary)}
               <EditFlexible
-                fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
+                fieldType="text"
+                id="salary"
+                type={'text'}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
                 required
-                name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
+                name="salary"
                 control={control}
               />
             </dd>
@@ -228,12 +327,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
               {vacancie?.office?.designation}
               <EditFlexible
                 fieldType="select"
-                id="unique"
+                id="officeId"
                 type={'select'}
-                options={[]}
                 required
                 name="officeId"
-                defaultValue={defaultSelect([vacancie?.office])}
+                options={offices}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
                 control={control}
               />
             </dd>
@@ -250,12 +350,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
               {vacancie?.formationType?.designation}
               <EditFlexible
                 fieldType="select"
-                id="unique"
+                id="formationTypeId"
                 type={'select'}
-                options={[]}
+                options={formations}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
                 required
-                name="officeId"
-                defaultValue={defaultSelect([vacancie?.office])}
+                name="formationTypeId"
                 control={control}
               />
             </dd>
@@ -306,11 +407,10 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
               ))}
               <EditFlexible
                 fieldType="select"
-                id="unique"
+                id="benefits"
                 type={'select'}
-                options={[]}
                 required
-                name="provinceId"
+                name="benefits"
                 defaultValue={defaultSelect([vacancie?.province])}
                 control={control}
               />
@@ -327,13 +427,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
             <dd className="mt-1 flex justify-between text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               Até - {vacancie?.limitDate}
               <EditFlexible
-                fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
+                fieldType="date"
+                id="limitDate"
+                type={'date'}
                 required
-                name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
+                name="limitDate"
                 control={control}
               />
             </dd>
@@ -345,13 +445,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
             <dd className="mt-1  flex justify-between text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {vacancie?.numVacancies}
               <EditFlexible
-                fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
+                fieldType="number"
+                id="numVacancies"
+                type={'number'}
                 required
-                name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
+                name="numVacancies"
                 control={control}
               />
             </dd>
@@ -392,12 +492,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
               {vacancie?.province?.designation}
               <EditFlexible
                 fieldType="select"
-                id="unique"
+                id="provinceId"
                 type={'select'}
-                options={[]}
+                options={provinces}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
                 required
                 name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
                 control={control}
               />
             </dd>
@@ -427,13 +528,13 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
             <dd className="mt-1 flex justify-between text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {vacancie?.details}
               <EditFlexible
-                fieldType="select"
-                id="unique"
-                type={'select'}
-                options={[]}
+                fieldType="text"
+                id="details"
+                type={'text'}
                 required
-                name="provinceId"
-                defaultValue={defaultSelect([vacancie?.province])}
+                onSubmit={updateVacancies}
+                entityId={vacancie?.id}
+                name="details"
                 control={control}
               />
             </dd>

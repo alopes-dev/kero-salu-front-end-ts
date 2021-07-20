@@ -27,7 +27,7 @@ const SignInForm: React.FC = () => {
       await signIn({
         password,
         userName,
-        provider: 1
+        provider: 0
       })
     } catch (error) {
       toast.error(error.message, {

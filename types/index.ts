@@ -72,5 +72,15 @@ export interface IVacanciesAttributes extends ITimestamp {
   job?: MinimalType
 }
 
+export interface ICompanyAttributes extends ITimestamp {
+  designation: string
+  nif: string
+  socialReason: string
+  mission: string
+  vision: string
+  phone: string
+  id?: string
+}
+
 export * from './http-response'
 export * from './user'

@@ -1,29 +1,28 @@
 import { api } from '../api'
 import {
-  VacanciesList,
-  StoreVacancies,
-  vacanceOne,
-  CancelVacance,
-  UpdateVacance,
-  VacanciesListByComapyId
+  CompanyList,
+  StoreCompany,
+  CompanyOne,
+  CancelCompany,
+  UpdateCompany
 } from './queries'
 import {
   HttpResponse,
-  IVacanciesAttributes,
+  ICompanyAttributes,
   ResponseInner,
   ResponseLess
 } from '@itypes/index'
-import { IVacanciesData } from './types'
+import { ICompanyData } from './types'
 
-export const getVacancies = async (): Promise<ResponseLess> => {
+export const getCompany = async (): Promise<ResponseLess> => {
   try {
     const res = await api.post('/graphql', {
-      query: VacanciesList
+      query: CompanyList
     })
 
     const { data } = res.data
 
-    const collection = data!['VacanciesList'] as Array<ResponseInner>
+    const collection = data!['CompanyList'] as Array<ResponseInner>
 
     return {
       data: collection,
@@ -34,20 +33,20 @@ export const getVacancies = async (): Promise<ResponseLess> => {
   }
 }
 
-export const getOneVacance = async (
+export const getOneCompany = async (
   id: string
-): Promise<HttpResponse<IVacanciesAttributes>> => {
+): Promise<HttpResponse<ICompanyAttributes>> => {
   try {
     const res = await api.post('/graphql', {
-      query: vacanceOne(id)
+      query: CompanyOne(id)
     })
 
     const { data } = res.data
 
-    const vacance = data!['Vacancies'] as IVacanciesAttributes
+    const Company = data!['Company'] as ICompanyAttributes
 
     return {
-      data: vacance,
+      data: Company,
       error: false,
       message: 'fetch successfull'
     }
@@ -60,21 +59,21 @@ export const getOneVacance = async (
   }
 }
 
-export const deleteVacances = async (
+export const deleteCompanys = async (
   id: string
-): Promise<HttpResponse<IVacanciesData>> => {
+): Promise<HttpResponse<ICompanyData>> => {
   try {
     if (!id) throw new Error('Vaga não existente')
     const res = await api.post('/graphql', {
-      query: CancelVacance(id)
+      query: CancelCompany(id)
     })
 
     const { data } = res.data
 
-    const vacance = data!['CancelVacancies'] as IVacanciesData
+    const Company = data!['CancelCompany'] as ICompanyData
 
     return {
-      data: vacance,
+      data: Company,
       error: false,
       message: 'Delete successfull'
     }
@@ -87,19 +86,17 @@ export const deleteVacances = async (
   }
 }
 
-export const getAllVacancies = async (): Promise<
-  HttpResponse<ReadonlyArray<IVacanciesAttributes>>
+export const getAllCompany = async (): Promise<
+  HttpResponse<ReadonlyArray<ICompanyAttributes>>
 > => {
   try {
     const res = await api.post('/graphql', {
-      query: VacanciesList
+      query: CompanyList
     })
 
     const { data } = res.data
 
-    const collection = data![
-      'VacanciesList'
-    ] as ReadonlyArray<IVacanciesAttributes>
+    const collection = data!['CompanyList'] as ReadonlyArray<ICompanyAttributes>
 
     return {
       data: collection,
@@ -115,42 +112,14 @@ export const getAllVacancies = async (): Promise<
   }
 }
 
-export const getAllVacanciesByCompanyId = async (
-  id: string
-): Promise<HttpResponse<ReadonlyArray<IVacanciesAttributes>>> => {
-  try {
-    const res = await api.post('/graphql', {
-      query: VacanciesListByComapyId(id)
-    })
-
-    const { data } = res.data
-
-    const collection = data![
-      'VacanciesListByComapyId'
-    ] as ReadonlyArray<IVacanciesAttributes>
-
-    return {
-      data: collection,
-      error: false,
-      message: 'fetch successfull'
-    }
-  } catch (error) {
-    return {
-      data: null,
-      error: true,
-      message: error.message
-    }
-  }
-}
-
-export const postVacancies = async (
-  formData: IVacanciesData
-): Promise<HttpResponse<IVacanciesData>> => {
+export const postCompany = async (
+  formData: ICompanyData
+): Promise<HttpResponse<ICompanyData>> => {
   try {
     if (!formData.companyId) throw new Error('Erro no envio dos dados.')
 
     const res = await api.post('/graphql', {
-      query: StoreVacancies,
+      query: StoreCompany,
       variables: {
         input: formData
       }
@@ -158,7 +127,7 @@ export const postVacancies = async (
 
     const { data } = res.data
     return {
-      data: data['CreateVacancies'] as IVacanciesData,
+      data: data['CreateCompany'] as ICompanyData,
       error: false,
       message: 'Vagas cadastrada com sucesso.'
     }
@@ -171,14 +140,14 @@ export const postVacancies = async (
   }
 }
 
-export const updateVacancies = async (
-  formData: IVacanciesData
-): Promise<HttpResponse<IVacanciesData>> => {
+export const updateCompany = async (
+  formData: ICompanyData
+): Promise<HttpResponse<ICompanyData>> => {
   try {
     if (!formData.id) throw new Error('Erro no envio dos dados.')
 
     const res = await api.post('/graphql', {
-      query: UpdateVacance,
+      query: UpdateCompany,
       variables: {
         input: formData
       }
@@ -186,7 +155,7 @@ export const updateVacancies = async (
     console.log(res)
     const { data } = res.data
     return {
-      data: data['UpdateVacancies'] as IVacanciesData,
+      data: data['UpdateCompany'] as ICompanyData,
       error: false,
       message: 'Vagas atualizada com sucesso.'
     }

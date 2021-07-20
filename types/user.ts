@@ -3,6 +3,8 @@ export type User = {
   userName: string
   email: string
   avatarUrl: string
+  provider: number
+  companyId: string
 }
 
 export type SignInData = {

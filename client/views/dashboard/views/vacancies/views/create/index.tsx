@@ -1,8 +1,4 @@
-import {
-  TextField,
-  SelectField,
-  SelectFieldSelectable
-} from '@components/fields'
+import { TextField, SelectFieldSelectable } from '@components/fields'
 import { SaveAsIcon } from '@heroicons/react/solid'
 import { getArea } from '@services/area'
 import { useContext, useEffect, useState } from 'react'
@@ -29,34 +25,6 @@ import { useAsyncState } from 'just-hook'
 import { FC } from 'react'
 import { CreateVacanciesViewProps } from './types'
 import { PencilIcon } from '@heroicons/react/outline'
-
-const defaultSelect = (data: Array<ResponseInner>): Array<Select> => {
-  if (data.length === 0 && data[0] === undefined) return []
-
-  return data.map(item => ({
-    label: item?.designation,
-    value: item?.id
-  }))
-}
-
-const transform = (data: Array<Object>, key: string): Array<ResponseInner> => {
-  if (!data) return
-  return data.map(item => ({
-    designation: item[key].designation,
-    id: item[key].id
-  }))
-}
-
-const experienceSelected = (experience: string): Array<Select> => {
-  if (!experience) return
-
-  return [
-    {
-      label: experience,
-      value: experience
-    }
-  ]
-}
 
 const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
   const { user } = useContext(AuthContext)

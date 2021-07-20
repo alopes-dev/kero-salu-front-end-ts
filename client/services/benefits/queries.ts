@@ -1,4 +1,4 @@
 export const BenefitList = `query{benefitList {
-  Id
+  id
   designation
 }}`

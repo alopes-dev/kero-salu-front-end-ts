@@ -12,7 +12,7 @@ export const getBenefits = async (): Promise<ResponseLess> => {
 
     const collection = data!['benefitList'] as Array<ResponseInner>
     return {
-      data: collection.map(item => ({ ...item, id: item.Id })),
+      data: collection.map(item => ({ ...item, id: item.id })),
       total: collection.length
     }
   } catch (error) {

@@ -9,3 +9,22 @@ export const StoreCompany = `mutation($input: CompanyInput){
 
   }
 }`
+
+export const patchCompany = `mutation($input: CompanyInput){
+  UpdateCompany(input: $input){
+    id
+
+  }
+}`
+
+export const CompanyById = (id: string) => `
+query{Company(id: "${id}") {
+  id
+	designation
+  nif
+  socialReason
+  mission
+  vision
+  phone
+}}
+`

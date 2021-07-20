@@ -28,7 +28,7 @@ export const Container = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding:0 25px;
+    padding: 0 25px;
 
     h1 {
       font-size: 30px;

@@ -19,4 +19,6 @@ export type EditFlexibleProps = {
   onChange?: (e) => void
   control?: any
   style?: any
+  entityId?: string
+  onSubmit?(data: any): any
 }

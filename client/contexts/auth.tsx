@@ -1,8 +1,12 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
-import { setCookie, parseCookies } from 'nookies'
+import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { useRouter } from 'next/router'
 
-import { recoverUserInformation, signInRequest } from '../services/auth'
+import {
+  recoverUserInformation,
+  resetPasswordRequest,
+  signInRequest
+} from '../services/auth'
 import { api } from '../services/api'
 import { SignInData, User } from '../../types/user'
 import useIsMounted from '@client/hooks/use-is-mounted'
@@ -11,12 +15,14 @@ type AuthContextType = {
   isAuthenticated: boolean
   user: User
   signIn: (data: SignInData) => Promise<void>
+  resetPassword: (data: Omit<SignInData, 'provider'>) => Promise<void>
+  signOut(): void
 }
 
 export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }) {
-  const { push } = useRouter()
+  const { push, reload } = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const isMounted = useIsMounted()
 
@@ -57,8 +63,27 @@ export function AuthProvider({ children }) {
     push('/dashboard').then()
   }
 
+  async function resetPassword({
+    userName,
+    password
+  }: Omit<SignInData, 'provider'>) {
+    return await resetPasswordRequest({
+      userName,
+      password
+    })
+  }
+
+  function signOut() {
+    destroyCookie({}, 'nextauth.token', {
+      path: '/'
+    })
+    reload()
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, signIn, resetPassword, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   )

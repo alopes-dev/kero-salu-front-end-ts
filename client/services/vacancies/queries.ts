@@ -19,6 +19,29 @@ export const VacanciesList = `query{VacanciesList {
   updatedAt
 }}`
 
+export const VacanciesListByComapyId = (id: string) => `
+query{VacanciesListByComapyId(id: "${id}") {
+  id
+  limitHours
+  salary
+  limitDate
+  isDone
+  city
+  employerId
+  formationTypeId
+  nationalityId
+  experience
+  numVacancies
+  functionType{
+    id
+    designation
+  }
+  details
+  createdAt
+  updatedAt
+
+}}`
+
 export const vacanceOne = (id: string) => `
 query{Vacancies(id:"${id}") {
   id
@@ -66,3 +89,10 @@ query{
   }
 }
 `
+
+export const UpdateVacance = `mutation($input: VacanciesInput){
+  UpdateVacancies(input: $input){
+    id
+
+  }
+}`

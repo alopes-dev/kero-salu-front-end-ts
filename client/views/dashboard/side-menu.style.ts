@@ -129,7 +129,7 @@ export const Item = styled.h3<IItem>`
 `
 export const UserName = styled.h2`
   color: ${props => props.theme.colors.text};
-  margin-top: 25px;
+  margin: auto 0px;
   font-weight: bold;
   margin-bottom: 25px;
   text-align: center;
@@ -144,6 +144,7 @@ export const UserAvatar = styled.div`
   border-radius: 50%;
   margin-top: 30px;
   margin-left: 10px;
+  margin-right: 10px;
   border: 4px solid ${props => props.theme.colors.primary};
   padding: 3px;
   img {
@@ -162,7 +163,7 @@ export const AppBar = styled.div`
   width: 94rem;
   height: 6vh;
   padding: 8px;
-  box-shadow: 0px 0px 5px 0px #555;
+  box-shadow: 0px 0px 2px 0px #555;
   position: fixed;
 `
 export const Childrens = styled.div`

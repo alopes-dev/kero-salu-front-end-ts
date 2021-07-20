@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useContext, useEffect, useState } from 'react'
 import GenericTable from '@components/table'
 import Profile from '@components/table/components/profile'
 import Card from '@components/card'
@@ -7,23 +7,38 @@ import { useRouter } from 'next/router'
 import { ROUTES } from '@constants/routes'
 import useIsMounted from '@client/hooks/use-is-mounted'
 import { useAsyncState } from 'just-hook'
-import { deleteVacances, getAllVacancies } from '@services/vacancies'
+import {
+  deleteVacances,
+  getAllVacancies,
+  getAllVacanciesByCompanyId
+} from '@services/vacancies'
 import { IVacanciesAttributes } from '@itypes/index'
 import { dataModifier } from './vacances-helper'
 import DeleteModal from '@components/modal/delete-modal'
 import toast, { Toaster } from 'react-hot-toast'
+import FilterForm from './views/filter'
+import { header } from './helper'
+import { AuthContext } from '@contexts/auth'
 
 const Vacancies: FC = () => {
   const { push } = useRouter()
   const isMounted = useIsMounted()
+  const { user } = useContext(AuthContext)
   const [isOpen, setIsOpen] = useState(false)
   const { setData, data } = useAsyncState<IVacanciesAttributes | any>()
   const [vacancie, setVacancie] = useState(null)
+  const [dataFilter, setDataDFilter] = useState<IVacanciesAttributes | any>()
 
   const fetchAllVacancies = useCallback(async () => {
     try {
-      const { data } = await getAllVacancies()
-      if (isMounted.current) setData(dataModifier(data))
+      const { data: res } =
+        user.provider === 1
+          ? await getAllVacancies()
+          : await getAllVacanciesByCompanyId(user.companyId)
+      if (isMounted.current) {
+        setData(dataModifier(res))
+        setDataDFilter(dataModifier(res))
+      }
     } catch (error) {}
   }, [])
 
@@ -63,10 +78,12 @@ const Vacancies: FC = () => {
         confirm={handleDelete}
         cancel={() => setIsOpen(false)}
       />
+
       <div
         className="lg:flex lg:flex-end lg:flex-end px-4 pb-4"
-        style={{ justifyContent: 'flex-end' }}
+        style={{ justifyContent: 'space-between' }}
       >
+        <FilterForm data={(dataFilter as any) || []} triggerEvent={setData} />
         <div className="mt-5 flex lg:mt-0 lg:ml-4">
           <span className="sm:ml-3">
             <button
@@ -86,17 +103,7 @@ const Vacancies: FC = () => {
       </div>
 
       <GenericTable
-        columns={[
-          {
-            label: 'Função',
-            key: 'functionType'
-          },
-          { key: 'limitHours', label: 'Carga horária' },
-          { key: 'limitDate', label: 'Prazo para vaga' },
-          { key: 'numVacancies', label: 'Nº de Vaga' },
-          { key: 'experience', label: 'Ano de experiência' },
-          { key: 'createdAt', label: 'Data de criação' }
-        ]}
+        columns={header}
         data={(data as any) || []}
         onUpdate={(data: IVacanciesAttributes) => {
           push(`${ROUTES.VACANCIES_WITH_ID}/${data.id}/update`).then()

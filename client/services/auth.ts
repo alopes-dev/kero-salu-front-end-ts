@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { api } from './api'
 
 type SignInRequestData = {
@@ -33,6 +32,15 @@ const recoverUser = (token: string) => `query{
   }
 }`
 
+const resetPasswordSchema = `
+mutation($input:  SessionInput){
+  ResetUserInfo(input: $input){
+    user{ email}
+
+  }
+}
+`
+
 export async function signInRequest({
   password,
   userName,
@@ -55,6 +63,31 @@ export async function signInRequest({
     if (!data['StoreSession']) throw new Error(errors[0].message)
 
     return data['StoreSession']
+  } catch (error) {
+    return error.message
+  }
+}
+
+export async function resetPasswordRequest({
+  password,
+  userName
+}: SignInRequestData) {
+  try {
+    const res = await api.post('/graphql', {
+      query: resetPasswordSchema,
+      variables: {
+        input: {
+          userName,
+          password
+        }
+      }
+    })
+
+    const { data, errors } = res.data
+
+    if (!data['ResetUserInfo']) throw new Error(errors[0].message)
+
+    return data['ResetUserInfo']
   } catch (error) {
     return error.message
   }

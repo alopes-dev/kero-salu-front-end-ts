@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { useContext } from 'react'
+import { AuthContext } from '@contexts/auth'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -14,11 +16,13 @@ function classNames(...classes) {
 }
 
 export default function TopBar() {
+  const { signOut } = useContext(AuthContext)
+
   return (
     <Disclosure
       as="nav"
-      style={{ width: '81.3%', position: 'fixed', zIndex: 9 }}
-      className="bg-white shadow"
+      style={{ width: '80%', position: 'fixed', zIndex: 5 }}
+      className="bg-white "
     >
       {({ open }) => (
         <>
@@ -64,41 +68,42 @@ export default function TopBar() {
                         >
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <div
+                                style={{ cursor: 'pointer' }}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm text-gray-700'
                                 )}
                               >
                                 Your Profile
-                              </a>
+                              </div>
                             )}
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <div
+                                style={{ cursor: 'pointer' }}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm text-gray-700'
                                 )}
                               >
                                 Settings
-                              </a>
+                              </div>
                             )}
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <div
+                                style={{ cursor: 'pointer' }}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm text-gray-700'
                                 )}
+                                onClick={signOut}
                               >
                                 Sign out
-                              </a>
+                              </div>
                             )}
                           </Menu.Item>
                         </Menu.Items>

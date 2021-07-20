@@ -12,18 +12,27 @@ const AsideMenu: FC = () => {
   return (
     <Container>
       <Aside>
-        <UserName>{user?.userName}</UserName>
+        {/* <UserName>{user?.userName}</UserName> */}
+        <img
+          style={{ height: '5.4rem' }}
+          className="mx-auto h-12 w-auto"
+          src="/img/k2.svg"
+          alt="Workflow"
+        />
         <Hr />
         <AsideMenuItem />
         <Hr />
-        <UserAvatar>
-          <Image
-            width={70}
-            height={70}
-            src={user?.avatarUrl || '/img/pic.jpeg'}
-            alt="user-picture"
-          />
-        </UserAvatar>
+        <div className="flex">
+          <UserAvatar>
+            <Image
+              width={70}
+              height={70}
+              src={user?.avatarUrl || '/img/pic.jpeg'}
+              alt="user-picture"
+            />
+          </UserAvatar>
+          <UserName>{user?.userName}</UserName>
+        </div>
       </Aside>
     </Container>
   )
