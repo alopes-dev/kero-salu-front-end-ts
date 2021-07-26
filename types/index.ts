@@ -13,6 +13,15 @@ export interface MinimalType {
   designation: string
 }
 
+export interface CompanyMinimalType {
+  id: string
+  designation: string
+  mission: string
+  vision: string
+  phone: string
+  socialReason: string
+}
+
 export type AreaType = {
   area: MinimalType
 }
@@ -59,7 +68,7 @@ export interface IVacanciesAttributes extends ITimestamp {
   companyId: string
   functionType?: MinimalType
   formationType?: MinimalType
-  company?: MinimalType
+  company?: CompanyMinimalType
   office?: MinimalType
   province?: MinimalType
   nationality?: MinimalType
@@ -80,6 +89,14 @@ export interface ICompanyAttributes extends ITimestamp {
   vision: string
   phone: string
   id?: string
+}
+
+export interface ICandidatureAttributes extends ITimestamp {
+  id?: string
+  candidateId: string
+  vacanciesId: string
+  isAnalized?: Number
+  status?: number
 }
 
 export * from './http-response'

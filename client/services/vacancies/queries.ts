@@ -14,6 +14,10 @@ export const VacanciesList = `query{VacanciesList {
     id
     designation
   }
+  company {
+    id
+    designation
+  }
   details
   createdAt
   updatedAt
@@ -57,7 +61,13 @@ query{Vacancies(id:"${id}") {
   functionTypeId
   functionType{id  designation }
   formationType{id designation}
-  company{id designation}
+  company{id
+    designation
+    mission
+    vision
+    phone
+    socialReason
+  }
   office{id designation}
   province{id designation}
   nationality{id designation}

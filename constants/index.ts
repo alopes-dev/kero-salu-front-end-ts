@@ -1,3 +1,5 @@
+import { ToastPosition } from 'react-hot-toast/dist/core/types'
+
 export enum ProfissionalExperiences {
   ONEYEAR = '1 Ano',
   TWOYEARS = '2 Anos',
@@ -11,4 +13,18 @@ export enum ProfissionalExperiences {
   NINEYEARS = '9 Anos',
   TENYEARS = '10 Anos',
   MOREYEARS = '+ 10 Anos'
+}
+
+export const toastErrorProps = {
+  duration: 4000,
+  position: 'top-right' as ToastPosition,
+  style: {
+    background: '#d85959',
+    color: '#fff'
+  }
+}
+
+export const toastSuccessProps = {
+  duration: 4000,
+  position: 'top-right' as ToastPosition
 }

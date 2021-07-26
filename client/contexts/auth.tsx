@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
 
   const handleRecoverUserInfo = useCallback(async () => {
     const { 'nextauth.token': token } = parseCookies()
-
     if (token) {
       const response = await recoverUserInformation(token)
 
@@ -60,7 +59,9 @@ export function AuthProvider({ children }) {
     user['id'] = user.companyId
     setUser(user)
 
-    push('/dashboard').then()
+    const path = provider === 1 ? '/mobile' : '/dashboard'
+
+    push(path).then()
   }
 
   async function resetPassword({

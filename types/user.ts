@@ -5,6 +5,7 @@ export type User = {
   avatarUrl: string
   provider: number
   companyId: string
+  personId: string
 }
 
 export type SignInData = {

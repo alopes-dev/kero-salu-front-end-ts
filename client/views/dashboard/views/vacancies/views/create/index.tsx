@@ -25,6 +25,7 @@ import { useAsyncState } from 'just-hook'
 import { FC } from 'react'
 import { CreateVacanciesViewProps } from './types'
 import { PencilIcon } from '@heroicons/react/outline'
+import { toastErrorProps, toastSuccessProps } from '@constants/index'
 
 const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
   const { user } = useContext(AuthContext)
@@ -60,20 +61,9 @@ const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
 
     if (isMounted.current) setLoading(false)
 
-    if (error)
-      return toast.error(message, {
-        duration: 4000,
-        position: 'top-right',
-        style: {
-          background: '#d85959',
-          color: '#fff'
-        }
-      })
+    if (error) return toast.error(message, toastErrorProps)
 
-    toast.success(message, {
-      duration: 4000,
-      position: 'top-right'
-    })
+    toast.success(message, toastSuccessProps)
 
     reset()
   }

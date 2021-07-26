@@ -14,6 +14,7 @@ const GQL = `mutation($input: SessionInput){
       email
       avatarUrl
       companyId
+      personId
     }
   }
 }`

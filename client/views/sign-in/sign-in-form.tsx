@@ -13,8 +13,18 @@ import { useRouter } from 'next/router'
 
 import toast, { Toaster } from 'react-hot-toast'
 import useIsMounted from '@client/hooks/use-is-mounted'
+export type SignInFormProps = {
+  agent?: string
+}
 
-const SignInForm: React.FC = () => {
+const getProvider = (agent: string) => {
+  console.log(agent)
+  if (agent === 'Candidato') return 1
+  else if (agent === 'Seguradora') return 0
+  else return 3
+}
+
+const SignInForm: React.FC<SignInFormProps> = ({ agent }) => {
   const { register, handleSubmit } = useForm()
   const { loading, setLoading } = useAsyncState()
   const { push } = useRouter()
@@ -27,7 +37,7 @@ const SignInForm: React.FC = () => {
       await signIn({
         password,
         userName,
-        provider: 0
+        provider: getProvider(agent)
       })
     } catch (error) {
       toast.error(error.message, {

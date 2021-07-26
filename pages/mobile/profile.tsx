@@ -1,14 +1,13 @@
 import React from 'react'
-import MobileHome from '@client/views/mobile/views/layout'
+import LayoutMobile from '@client/views/mobile/views/layout'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import Home from '@client/views/mobile/views/home'
 
-const Mobile: React.FC = () => {
+const ProfileMobile: React.FC = () => {
   return (
-    <MobileHome title="Home">
-      <Home />
-    </MobileHome>
+    <LayoutMobile title="Profile">
+      <h1>Profile Page</h1>
+    </LayoutMobile>
   )
 }
 
@@ -29,4 +28,4 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   }
 }
 
-export default Mobile
+export default ProfileMobile
