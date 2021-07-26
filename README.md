@@ -1,6 +1,6 @@
 # Project Build with Next Js
 
- <p>This project is a simple Mochi Test...!</p>
+ <p>This project ...!</p>
 
 ## ✋🏻 Prerequisites
 
@@ -13,11 +13,11 @@
 Clone the repository, and install the dependencies by running the following commands:
 
 ```sh
-  $ git clone https://github.com/AdilsonLopesDev/Mochi-Test-Front-End-MC.git
+  $ git clone https://github.com/AdilsonLopesDev/kero-salu-front-end-ts.git
 ```
 
 ```sh
-  $ cd Mochi-Test-Front-End-MC
+  $ cd kero-salu-front-end-ts
 ```
 
 ```sh
