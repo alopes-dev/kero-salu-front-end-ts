@@ -15,7 +15,7 @@ const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
     <div>
       <Disclosure
         as="nav"
-        style={{ position: 'fixed', width: '100%' }}
+        style={{ position: 'fixed', zIndex: 99, width: '100%' }}
         className="bg-gray-800"
       >
         {({ open }) => (
@@ -86,7 +86,12 @@ const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
                       alt="user-picture"
                     />
                   </div>
-                  <div className="ml-3">
+                  <div
+                    className="ml-3"
+                    onClick={() => {
+                      push(Profile.Profile.url)
+                    }}
+                  >
                     <div className="text-base font-medium leading-none text-white">
                       {user?.userName}
                     </div>
@@ -100,20 +105,23 @@ const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
                   </button>
                 </div>
                 <div className="mt-3 px-2 space-y-1">
-                  {Object.keys(Profile).map(item => (
-                    <div
-                      key={Profile[item].title}
-                      className="block px-3 py-2 flex  rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-                      onClick={() => {
-                        if (typeof Profile[item].func === 'function')
-                          Profile[item].func(signOut)
-                        else push(Profile[item].url)
-                      }}
-                    >
-                      <div className="mr-3">{Profile[item]?.icon}</div>{' '}
-                      {Profile[item].title}
-                    </div>
-                  ))}
+                  {Object.keys(Profile).map(item => {
+                    if (Profile[item].hide) return null
+                    return (
+                      <div
+                        key={Profile[item].title}
+                        className="block px-3 py-2 flex  rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                        onClick={() => {
+                          if (typeof Profile[item].func === 'function')
+                            Profile[item].func(signOut)
+                          else push(Profile[item].url)
+                        }}
+                      >
+                        <div className="mr-3">{Profile[item]?.icon}</div>{' '}
+                        {Profile[item].title}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </Disclosure.Panel>

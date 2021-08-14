@@ -65,7 +65,7 @@ const Home: React.FC = () => {
               <h1 style={{ fontSize: '25px' }} className="font-bold text-black">
                 UI/UX Design
               </h1>
-              <small>32 vagas de emprego</small>
+              <small>{jobs.length} vagas de emprego</small>
             </div>
             <IconFilter className="shadow">
               <IoFilterOutline size={20} />

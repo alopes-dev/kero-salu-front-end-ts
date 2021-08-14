@@ -1,56 +1,62 @@
-import { FC } from 'react'
+import { FC, useCallback, useContext } from 'react'
 import GenericTable from '@components/table'
 import Profile from '@components/table/components/profile'
 import Card from '@components/card'
 import { PlusCircleIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { ROUTES } from '@constants/routes'
+import { useEffect } from 'react'
+import { getPersonFromVacance } from '@services/person'
+import { AuthContext } from '@contexts/auth'
+import { useState } from 'react'
+import { IPersonAttributes } from '@itypes/index'
+//`${candidate.firstName} ${candidate.lastName}`
+
+const candidateParser = (candidates: Array<IPersonAttributes>) => {
+  return candidates?.map(candidate => ({
+    ...candidate,
+    name: (
+      <Profile
+        name={`${candidate.firstName} ${candidate.lastName}`}
+        info={`${candidate.user.email}`}
+        image="/img/pic.jpeg"
+      />
+    ),
+    age: candidate.birthDate
+  }))
+}
 
 const Candidates: FC = () => {
   const { push } = useRouter()
+  const { user } = useContext(AuthContext)
+  const [candidates, setCandidates] = useState<Array<IPersonAttributes>>()
+
+  const fetchPersonFromVacance = useCallback(async () => {
+    const res = await getPersonFromVacance(user?.companyId)
+    setCandidates(candidateParser(res) || [])
+  }, [user])
+
+  useEffect(() => {
+    fetchPersonFromVacance()
+  }, [fetchPersonFromVacance])
 
   return (
     <Card classNames="bg-white shadow rounded-lg lg:pt-5 sm:px-6 lg:px-0">
       <div
         className="lg:flex lg:flex-end lg:flex-end px-4 pb-4"
         style={{ justifyContent: 'flex-end' }}
-      >
-        <div className="mt-5 flex lg:mt-0 lg:ml-4">
-          <span className="sm:ml-3">
-            <button
-              type="button"
-              onClick={() => push(ROUTES.CANDIDATE_CREATE).then()}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <PlusCircleIcon
-                className="-ml-1 mr-2 h-5 w-5 text-white"
-                aria-hidden="true"
-                style={{ color: '#fff' }}
-              />
-              Novo Candidato
-            </button>
-          </span>
-        </div>
-      </div>
+      ></div>
 
       <GenericTable
+        onShow={data => {
+          push(`/dashboard/candidate/${data.id}/detail`).then()
+        }}
         columns={[
-          {
-            label: 'Nome',
-            key: 'name',
-            view: Profile,
-            isCustumized: true,
-            info: 'alopes.dev@gmail.com',
-            image: '/img/pic.jpeg'
-          },
-          { key: 'age', label: 'Idade' }
+          { label: 'Nome', key: 'name' },
+          { key: 'age', label: 'Data de Nascimento' },
+          { key: 'address', label: 'Morada' }
         ]}
-        data={[
-          { name: 'António Lopes', age: '27 anos' },
-          { name: 'Fábio Monteiro', age: '27 anos' },
-          { name: 'Wilson Lopes', age: '27 anos' },
-          { name: 'Rosa Lopes', age: '27 anos' }
-        ]}
+        data={candidates}
       />
     </Card>
   )

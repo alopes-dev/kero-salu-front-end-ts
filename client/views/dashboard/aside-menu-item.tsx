@@ -22,7 +22,6 @@ const AsideMenuItem: FC = () => {
           <Item
             key={title}
             active={active === title}
-            className="bg-indigo-600"
             onClick={() => handleActive(title, url)}
           >
             <Icon />

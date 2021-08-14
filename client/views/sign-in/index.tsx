@@ -14,7 +14,7 @@ const SignIn: FC<SignInProps> = ({ agent }) => {
           text="Sign in to your account"
           info={agent || 'Seguradora'}
         />
-        <SignInForm agent={agent} />
+        <SignInForm agent={agent || 'Seguradora'} />
       </div>
     </div>
   )

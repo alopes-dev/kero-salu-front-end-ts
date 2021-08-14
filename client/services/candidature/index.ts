@@ -183,7 +183,7 @@ export const updateCandidature = async (
         input: formData
       }
     })
-    console.log(res)
+
     const { data } = res.data
     return {
       data: data['UpdateCandidature'] as ICandidatureData,

@@ -32,7 +32,7 @@ const Vacancies: FC = () => {
   const fetchAllVacancies = useCallback(async () => {
     try {
       const { data: res } =
-        user.provider === 1
+        user.provider === 3
           ? await getAllVacancies()
           : await getAllVacanciesByCompanyId(user.companyId)
       if (isMounted.current) {
@@ -109,7 +109,7 @@ const Vacancies: FC = () => {
           push(`${ROUTES.VACANCIES_WITH_ID}/${data.id}/update`).then()
         }}
         onShow={(data: IVacanciesAttributes) => {
-          push(`${ROUTES.VACANCIES_WITH_ID}/${data.id}/detail`).then()
+          push(`${ROUTES.VACANCIES_WITH_ID}/${data.id}/details`).then()
         }}
         onDelete={(data: IVacanciesAttributes) => {
           setVacancie(data.id)

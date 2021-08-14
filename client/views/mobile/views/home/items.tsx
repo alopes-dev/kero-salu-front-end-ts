@@ -29,7 +29,11 @@ const ItemsJobs: React.FC<ItemsJobProps> = ({ job, active }) => {
           <h4>{job.comapany}</h4>
           <span>{job.title}</span>
           <small>
-            kz 8.00000 - <small>Luanda, Angola</small>
+            {new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'AOA'
+            }).format(Number(job?.salary))}
+            - <small>Luanda, Angola</small>
           </small>
         </CompanyContent>
         <ContentIcon active={active} isFavorite={true}>

@@ -183,7 +183,7 @@ export const updateVacancies = async (
         input: formData
       }
     })
-    console.log(res)
+
     const { data } = res.data
     return {
       data: data['UpdateVacancies'] as IVacanciesData,

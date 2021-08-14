@@ -13,12 +13,12 @@ import { useRouter } from 'next/router'
 
 import toast, { Toaster } from 'react-hot-toast'
 import useIsMounted from '@client/hooks/use-is-mounted'
+
 export type SignInFormProps = {
   agent?: string
 }
 
 const getProvider = (agent: string) => {
-  console.log(agent)
   if (agent === 'Candidato') return 1
   else if (agent === 'Seguradora') return 0
   else return 3
@@ -33,6 +33,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ agent }) => {
 
   const onSubmit = async ({ password, userName }: SignInData) => {
     setLoading(true)
+
     try {
       await signIn({
         password,
@@ -83,7 +84,13 @@ const SignInForm: React.FC<SignInFormProps> = ({ agent }) => {
         <div className="text-sm">
           <a
             href="#"
-            onClick={() => push(ROUTES.SIGN_UP).then()}
+            onClick={() =>
+              push(
+                getProvider(agent) === 1
+                  ? `${ROUTES.SIGN_UP}-mobile`
+                  : ROUTES.SIGN_UP
+              ).then()
+            }
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
             Criar nova conta

@@ -1,22 +1,24 @@
-import React from 'react'
+import DashboardContainer from '@client/views/dashboard'
+import VacanciesDetails from '@client/views/dashboard/views/vacancies/views/details'
 import Layout from '@components/layout'
-import DashboardContainer from '@client/views/dashboard/index'
+import { VacanceProvider } from '@contexts/vacancie'
+import { IVacanciesAttributes } from '@itypes/index'
+import { getOneVacance } from '@services/vacancies'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import VacanciesDetails from '@client/views/dashboard/views/vacancies/views/details'
-import { getOneVacance } from '@services/vacancies'
-import { IVacanciesAttributes } from '@itypes/index'
-import { FC } from 'react'
+import React from 'react'
 
 type VacanciesDetailedPageProps = {
   vacancie: IVacanciesAttributes
 }
 
-const VacanciesDetailedPage: FC<VacanciesDetailedPageProps> = props => {
+const DetailsViews: React.FC<VacanciesDetailedPageProps> = props => {
   return (
-    <Layout title="Vacancies - Detail">
-      <DashboardContainer {...props} components={VacanciesDetails} />
-    </Layout>
+    <VacanceProvider>
+      <Layout title="Vacancies - Detail">
+        <DashboardContainer {...props} components={VacanciesDetails} />
+      </Layout>
+    </VacanceProvider>
   )
 }
 
@@ -42,4 +44,4 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   }
 }
 
-export default VacanciesDetailedPage
+export default DetailsViews

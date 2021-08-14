@@ -2,12 +2,15 @@ import React from 'react'
 import LayoutMobile from '@client/views/mobile/views/layout'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
+import Profile from '@client/views/mobile/views/home/views/profile'
+import GlobalStyle from '@styles/globalMobile'
 
 const ProfileMobile: React.FC = () => {
   return (
-    <LayoutMobile title="Profile">
-      <h1>Profile Page</h1>
-    </LayoutMobile>
+    <>
+      <GlobalStyle />
+      <Profile />
+    </>
   )
 }
 

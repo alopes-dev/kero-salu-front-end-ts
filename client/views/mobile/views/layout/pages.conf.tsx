@@ -22,11 +22,6 @@ export const Navigation = {
     title: 'Minhas Vagas',
     icon: <IoBookmarksOutline size={24} />,
     url: '/mobile/vagas'
-  },
-  Settings: {
-    title: 'Definições',
-    icon: <IoSettingsOutline size={24} />,
-    url: '/mobile/settings'
   }
 }
 
@@ -34,7 +29,8 @@ export const Profile = {
   Profile: {
     title: 'Perfil',
     icon: <IoPersonOutline size={24} />,
-    url: '/mobile/profile'
+    url: '/mobile/profile',
+    hide: true
   },
 
   SignOut: {

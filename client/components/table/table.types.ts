@@ -3,7 +3,7 @@ import { FC } from 'react'
 export type TableProps = {
   data: Array<Object>
   columns: Array<ColumnsItems>
-  onShow?(data: Object): void
+  onShow?(data: any): void
   onUpdate?(data: Object): void
   onDelete?(data: Object): void
 }

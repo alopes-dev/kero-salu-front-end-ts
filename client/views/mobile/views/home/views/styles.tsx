@@ -57,6 +57,7 @@ export const ActionBottomContainer = styled.div`
   position: fixed;
   width: 100%;
   bottom: 0;
+
   svg {
     color: #f59595;
   }

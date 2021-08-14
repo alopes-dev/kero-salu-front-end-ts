@@ -33,6 +33,9 @@ import {
 import { toastErrorProps, toastSuccessProps } from '@constants/index'
 import { useEffect } from 'react'
 import { verifyCandidature } from '@services/candidature/index'
+import GlobalStyle from '@styles/globalMobile'
+
+import { checkFavoriteJobs } from '@services/favorite-jobs'
 
 const favoriteButtonStyle = {
   borderRadius: '15px',
@@ -75,6 +78,7 @@ const JobDetailsViews: React.FC<JobDetailProps> = ({ job }) => {
   const { back } = useRouter()
   const { user } = useContext(AuthContext)
   const isMounted = useIsMounted()
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [detailRender, setDetailRender] = useState<DetailRender>('DESCIPTION')
   const { loading, setLoading, data, setData } = useAsyncState<boolean>()
 
@@ -109,6 +113,18 @@ const JobDetailsViews: React.FC<JobDetailProps> = ({ job }) => {
 
   useEffect(() => {
     checkJobs()
+  }, [checkJobs])
+
+  const isFavoriteJobs = useCallback(async () => {
+    const { data: res } = await checkFavoriteJobs({
+      candidateId: user.personId,
+      vacanciesId: job.id
+    })
+    if (isMounted.current) setIsFavorite(!!res)
+  }, [user, job])
+
+  useEffect(() => {
+    isFavoriteJobs()
   }, [checkJobs])
 
   return (
@@ -167,7 +183,10 @@ const JobDetailsViews: React.FC<JobDetailProps> = ({ job }) => {
       <ActionBottomContainer>
         <div className="flex mb-2 px-2">
           <button
-            style={favoriteButtonStyle}
+            style={{
+              ...favoriteButtonStyle,
+              backgroundColor: isFavorite ? '#a72525' : 'transparent'
+            }}
             className=" relative flex justify-center py-2 px-4 bg-transparent border border-transparent text-sm font-medium rounded-md text-white  hover:bg-indigo-600 "
           >
             <IoHeartOutline size={29} />

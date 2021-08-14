@@ -26,40 +26,10 @@ export const CandidatureList = `query{CandidatureList {
 export const CandidatureOne = (id: string) => `
 query{Candidature(id:"${id}") {
   id
-  limitHours
-  salary
-  limitDate
-  isDone
-  city
-  skills
-  employerId
-  formationTypeId
-  nationalityId
-  functionTypeId
-  functionType{id  designation }
-  formationType{id designation}
-  company{id
-    designation
-    mission
-    vision
-    phone
-    socialReason
-  }
-  office{id designation}
-  province{id designation}
-  nationality{id designation}
-  CandidatureAreas{area{id designation}}
-  CandidatureBenefits{benefit{id designation}}
-  CandidatureLanguages{language{id designation}}
-  CandidatureCompetences{competence{id designation}}
-  user{email userName}
-  job{id designation}
-  experience
-  numCandidature
-  details
+  isAnalized
+  candidateId
   createdAt
   updatedAt
-
 }}`
 
 export const StoreCandidature = `mutation($input: CandidatureInput){
@@ -87,6 +57,5 @@ query{
 export const UpdateCandidature = `mutation($input: CandidatureInput){
   UpdateCandidature(input: $input){
     id
-
   }
 }`

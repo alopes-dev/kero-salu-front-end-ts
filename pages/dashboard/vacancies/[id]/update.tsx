@@ -3,7 +3,7 @@ import Layout from '@components/layout'
 import DashboardContainer from '@client/views/dashboard/index'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import CreateVacanciesView from '@client/views/dashboard/views/vacancies/views/create'
+import UpdateVacanciesView from '@client/views/dashboard/views/vacancies/views/update'
 import { getOneVacance } from '@services/vacancies'
 import { IVacanciesAttributes } from '@itypes/index'
 import { FC } from 'react'
@@ -14,8 +14,8 @@ type VacanciesUpdatedPageProps = {
 
 const VacanciesUpdatedPage: FC<VacanciesUpdatedPageProps> = props => {
   return (
-    <Layout title="Vacancies - Detail">
-      <DashboardContainer {...props} components={CreateVacanciesView} />
+    <Layout title="Vacancies - Atualizar">
+      <DashboardContainer {...props} components={UpdateVacanciesView} />
     </Layout>
   )
 }

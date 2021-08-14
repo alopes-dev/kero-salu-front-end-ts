@@ -18,6 +18,18 @@ export const VacanciesList = `query{VacanciesList {
     id
     designation
   }
+  candidatures {
+    id
+    createdAt
+    updatedAt
+    isAnalized
+    candidate {
+      id
+      firstName
+      lastName
+      user{photoUrl}
+    }
+  }
   details
   createdAt
   updatedAt
@@ -36,14 +48,27 @@ query{VacanciesListByComapyId(id: "${id}") {
   nationalityId
   experience
   numVacancies
+
   functionType{
     id
     designation
   }
+  candidatures {
+    id
+    createdAt
+    updatedAt
+    isAnalized
+    candidate {
+      id
+      firstName
+      lastName
+      user{photoUrl}
+    }
+  }
   details
   createdAt
   updatedAt
-
+  job { id designation }
 }}`
 
 export const vacanceOne = (id: string) => `
@@ -82,7 +107,18 @@ query{Vacancies(id:"${id}") {
   details
   createdAt
   updatedAt
-
+  candidatures {
+    id
+    createdAt
+    updatedAt
+    isAnalized
+    candidate {
+      id
+      firstName
+      lastName
+      user{photoUrl}
+    }
+  }
 }}`
 
 export const StoreVacancies = `mutation($input: VacanciesInput){

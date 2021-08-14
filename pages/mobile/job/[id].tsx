@@ -3,6 +3,8 @@ import { IVacanciesAttributes } from '@itypes/index'
 import { getOneVacance } from '@services/vacancies'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
+import GlobalStyle from '@styles/globalMobile'
+
 import React from 'react'
 
 type JobDetailPageProps = {
@@ -10,7 +12,12 @@ type JobDetailPageProps = {
 }
 
 const JobDetail: React.FC<JobDetailPageProps> = ({ job }) => {
-  return <JobDetailsViews job={job} />
+  return (
+    <>
+      <GlobalStyle />
+      <JobDetailsViews job={job} />
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {

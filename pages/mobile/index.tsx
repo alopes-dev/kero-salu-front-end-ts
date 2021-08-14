@@ -3,10 +3,12 @@ import MobileHome from '@client/views/mobile/views/layout'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import Home from '@client/views/mobile/views/home'
+import GlobalStyle from '@styles/globalMobile'
 
 const Mobile: React.FC = () => {
   return (
     <MobileHome title="Home">
+      <GlobalStyle />
       <Home />
     </MobileHome>
   )

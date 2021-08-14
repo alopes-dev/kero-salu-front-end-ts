@@ -11,8 +11,7 @@ const AsideMenu: FC = () => {
 
   return (
     <Container>
-      <Aside>
-        {/* <UserName>{user?.userName}</UserName> */}
+      <Aside className="shadow">
         <img
           style={{ height: '5.4rem' }}
           className="mx-auto h-12 w-auto"
@@ -21,7 +20,7 @@ const AsideMenu: FC = () => {
         />
         <Hr />
         <AsideMenuItem />
-        <Hr />
+        <Hr className="mt-5" />
         <div className="flex">
           <UserAvatar>
             <Image

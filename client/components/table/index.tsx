@@ -19,7 +19,7 @@ const Table: React.FC<TableProps> = ({
               <Thead columns={columns} />
               <Tbody
                 columns={columns}
-                data={data}
+                data={data || []}
                 onUpdate={onUpdate}
                 onShow={onShow}
                 onDelete={onDelete}

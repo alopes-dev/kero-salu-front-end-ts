@@ -43,12 +43,15 @@ export function AuthProvider({ children }) {
   }, [handleRecoverUserInfo])
 
   async function signIn({ userName, provider, password }: SignInData) {
-    const { token, user } = await signInRequest({
+    const res = await signInRequest({
       userName,
       provider,
       password
     })
 
+    if (typeof res === 'string') throw new Error(res)
+
+    const { token, user } = res
     if (!token) throw new Error('Sem autorização.')
 
     setCookie(undefined, 'nextauth.token', token, {

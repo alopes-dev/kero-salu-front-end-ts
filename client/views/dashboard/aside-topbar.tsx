@@ -19,11 +19,7 @@ export default function TopBar() {
   const { signOut } = useContext(AuthContext)
 
   return (
-    <Disclosure
-      as="nav"
-      style={{ width: '80%', position: 'fixed', zIndex: 5 }}
-      className="bg-white "
-    >
+    <Disclosure as="nav" style={{ width: '80%', position: 'fixed', zIndex: 5 }}>
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">

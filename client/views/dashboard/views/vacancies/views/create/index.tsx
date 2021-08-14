@@ -26,9 +26,11 @@ import { FC } from 'react'
 import { CreateVacanciesViewProps } from './types'
 import { PencilIcon } from '@heroicons/react/outline'
 import { toastErrorProps, toastSuccessProps } from '@constants/index'
+import { useRouter } from 'next/router'
 
 const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
   const { user } = useContext(AuthContext)
+  const { back } = useRouter()
   const { loading, setLoading } = useAsyncState()
   const isEditable = !!vacancie
   const [areas, setAreas] = useState<ReadonlyArray<Select>>()
@@ -55,7 +57,7 @@ const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
   const handleSave = async (vacancies: IVacanciesData) => {
     setLoading(true)
 
-    vacancies.companyId = user.id
+    vacancies.companyId = user.companyId
 
     const { error, message } = await postVacancies(vacancies)
 
@@ -65,7 +67,7 @@ const CreateVacancieView: FC<CreateVacanciesViewProps> = ({ vacancie }) => {
 
     toast.success(message, toastSuccessProps)
 
-    reset()
+    back()
   }
 
   const fetchArea = useCallback(async () => {
