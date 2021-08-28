@@ -5,8 +5,9 @@ export interface IUserAccount {
 }
 
 export interface IPersonData {
+  id?: string
   firstName: string
   lastName: string
   birthDate: string
-  userAccount: IUserAccount
+  userAccount?: IUserAccount
 }

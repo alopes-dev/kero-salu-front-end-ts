@@ -16,17 +16,24 @@ import { useContext } from 'react'
 import { AuthContext } from '@contexts/auth'
 import { ICompanyAttributes } from '@itypes/index'
 import { PencilIcon } from '@heroicons/react/outline'
+import { UpdateUserAccount } from '@services/user-account'
 
 const AccountDetails: React.FC = () => {
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit } = useForm()
   const {
     loading,
     setLoading,
     data,
     setData
   } = useAsyncState<ICompanyAttributes>()
-  const { push, reload } = useRouter()
-  const { user } = useContext(AuthContext)
+  const { reload } = useRouter()
+  const { user, setUser } = useContext(AuthContext)
+  const getUserInfo = useCallback(async () => {
+    if (!user?.companyId) return
+
+    const res = await getCompany(user?.companyId)
+    setData(res)
+  }, [user])
 
   const onSubmit = async (formData: ICompanyData) => {
     setLoading(true)
@@ -42,7 +49,8 @@ const AccountDetails: React.FC = () => {
       email,
       designation,
       mission,
-      vision
+      vision,
+      userName
     } = formData
 
     try {
@@ -51,11 +59,18 @@ const AccountDetails: React.FC = () => {
         designation,
         email,
         nif,
-        password,
         phone,
         mission,
         vision
       })
+
+      if (userName || email) {
+        await UpdateUserAccount({
+          email,
+          userName,
+          id: user.id
+        })
+      }
 
       toast.success('Dados atualizados com sucesso.', {
         duration: 4000,
@@ -76,13 +91,6 @@ const AccountDetails: React.FC = () => {
       setLoading(false)
     }
   }
-
-  const getUserInfo = useCallback(async () => {
-    if (!user?.companyId) return
-
-    const res = await getCompany(user?.companyId)
-    setData(res)
-  }, [user])
 
   useEffect(() => {
     getUserInfo()
@@ -117,7 +125,7 @@ const AccountDetails: React.FC = () => {
                   {...register('userName')}
                   required
                   className="rounded relative block w-full px-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Telefone"
+                  placeholder="username"
                   defaultValue={user?.userName}
                 />
               </div>

@@ -1,3 +1,4 @@
+import NotificationView from './notification'
 import {
   IoKeyOutline,
   IoLayersOutline,
@@ -28,6 +29,6 @@ export const SettingConfig = {
   notificaiton: {
     icon: <IoNotificationsOutline size={24} />,
     title: 'Notificações',
-    view: <h1>Notificaiton</h1>
+    view: <NotificationView />
   }
 }

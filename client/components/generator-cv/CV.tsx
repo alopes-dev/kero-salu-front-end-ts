@@ -110,10 +110,10 @@ const CvViewer: React.FC<CvViewerProps> = ({ candidate }) => {
         <Col>
           <Header>
             <UserAvatar>
-              <Image
+              <img
                 width={70}
                 height={70}
-                src={'/img/pic.jpeg'}
+                src={`http://localhost:5500/files/${candidate?.user?.photoUrl}`}
                 alt="user-picture"
               />
             </UserAvatar>

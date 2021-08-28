@@ -3,6 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useContext } from 'react'
 import { AuthContext } from '@contexts/auth'
+import { IoExitOutline } from 'react-icons/io5'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -16,8 +17,7 @@ function classNames(...classes) {
 }
 
 export default function TopBar() {
-  const { signOut } = useContext(AuthContext)
-
+  const { user, notifiers, signOut } = useContext(AuthContext)
   return (
     <Disclosure as="nav" style={{ width: '80%', position: 'fixed', zIndex: 5 }}>
       {({ open }) => (
@@ -25,13 +25,29 @@ export default function TopBar() {
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-end h-16">
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <button
+                  style={{ position: 'relative' }}
+                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
                   <span className="sr-only">View notifications</span>
                   <BellIcon
                     style={{ color: '#fff' }}
                     className="h-6 w-6"
                     aria-hidden="true"
                   />
+
+                  <small
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      color: '#de6565',
+                      right: 0,
+                      fontSize: '16px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {notifiers?.length}
+                  </small>
                 </button>
 
                 {/* Profile dropdown */}
@@ -43,7 +59,10 @@ export default function TopBar() {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="/img/pic.jpeg"
+                            src={
+                              `http://localhost:5500/files/${user?.avatarUrl}` ||
+                              '/img/pic.jpeg'
+                            }
                             alt=""
                           />
                         </Menu.Button>
@@ -68,37 +87,15 @@ export default function TopBar() {
                                 style={{ cursor: 'pointer' }}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}
-                              >
-                                Your Profile
-                              </div>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <div
-                                style={{ cursor: 'pointer' }}
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}
-                              >
-                                Settings
-                              </div>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <div
-                                style={{ cursor: 'pointer' }}
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
+                                  'block px-4 py-2 text-sm text-gray-700 flex justify-between'
                                 )}
                                 onClick={signOut}
                               >
-                                Sign out
+                                Sair
+                                <IoExitOutline
+                                  className="h-6 w-6"
+                                  aria-hidden="true"
+                                />
                               </div>
                             )}
                           </Menu.Item>

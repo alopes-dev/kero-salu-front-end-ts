@@ -2,8 +2,11 @@ import {
   messageSuccess,
   OperationType
 } from '@client/views/dashboard/views/vacancies/views/details/candidates-list'
+import ModalSolicitationForm from '@components/modal/modal-solicitaion-form'
 import { toastSuccessProps, toastErrorProps } from '@constants/index'
+import { IPersonAttributes } from '@itypes/index'
 import { getOneCandidature, updateCandidature } from '@services/candidature'
+import { postSolicitation } from '@services/solicitation'
 import { useLocalStorage } from 'just-hook'
 import React, { useEffect, useState } from 'react'
 import { useCallback } from 'react'
@@ -14,6 +17,7 @@ import {
   IoMegaphoneOutline,
   IoTrashOutline
 } from 'react-icons/io5'
+import SolicitationForm from './solicitation-form'
 import { Button, ActionsButton } from './style'
 
 type MessagesType = {
@@ -35,9 +39,15 @@ const candidatureStatusContent = {
   '-1': 'Rejeitado'
 }
 
-const ButtonsActions: React.FC = () => {
+type ButtonsActionsProps = {
+  candidate: IPersonAttributes
+}
+
+const ButtonsActions: React.FC<ButtonsActionsProps> = ({ candidate }) => {
   const [id] = useLocalStorage('kero-salu@candidatureId')
   const [approved, setApproved] = useState<number>(0)
+  const [solicitationData, setSolicitationData] = useState<any>()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const handleOperation = async ({ id, isAnalized }: OperationType) => {
     try {
@@ -64,12 +74,39 @@ const ButtonsActions: React.FC = () => {
     checkCandidatureStatus()
   }, [checkCandidatureStatus])
 
+  const sendSolicitation = async () => {
+    const { description, documentTypeId } = solicitationData
+
+    const { error, message } = await postSolicitation({
+      description,
+      documentTypeId,
+      candidateId: candidate.id,
+      candidatureId: `${id}`
+    })
+
+    if (error) return toast.error(message, toastErrorProps)
+
+    toast.success('Solicitação feita', toastSuccessProps)
+
+    setIsOpen(false)
+  }
+
   return (
     <>
       <Toaster />
+      <ModalSolicitationForm confirm={sendSolicitation} isOpen={isOpen}>
+        <div style={{ width: '370px' }}>
+          <h1>Testando formulario</h1>
+          <SolicitationForm
+            gettersValue={data => {
+              setSolicitationData(data)
+            }}
+          />
+        </div>
+      </ModalSolicitationForm>
       {approved !== -1 && (
         <ActionsButton>
-          <Button>
+          <Button onClick={() => setIsOpen(true)}>
             <IoFileTrayOutline className="file" />
             Solicitar Documentos
           </Button>

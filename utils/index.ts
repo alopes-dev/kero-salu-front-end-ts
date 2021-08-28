@@ -8,3 +8,21 @@ export const transfSelect = (
     label: item.designation
   }))
 }
+
+export const imgFileExtension = ['jpeg', 'jpg', 'png'] as ReadonlyArray<string>
+
+export const docsFileExtension = [
+  'pdf',
+  'doc',
+  'docx',
+  'msword',
+  'vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'odt',
+  'xls',
+  'xlsx',
+  'ods',
+  'ppt',
+  'pptx',
+  'txt',
+  ...imgFileExtension
+] as ReadonlyArray<string>

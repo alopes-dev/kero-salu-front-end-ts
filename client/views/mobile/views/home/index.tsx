@@ -1,5 +1,6 @@
+import { TextField } from '@components/fields'
 import { getAllVacancies } from '@services/vacancies'
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import { useEffect } from 'react'
 import { useCallback } from 'react'
 import { useState } from 'react'
@@ -16,45 +17,46 @@ import {
 } from './style'
 import { Job } from './types'
 
-const jobsHardCoded = [
-  {
-    image: '/img/k2.svg',
-    name: 'Bai Seguros',
-    id: 'any-id',
-    priceFormatted: 'Full time UI Design'
-  },
-  {
-    image: '/img/pic.jpeg',
-    name: 'Internacional Seguros',
-    id: 'id-any',
-    priceFormatted: 'Full time Balconista'
-  }
-]
-
 const Home: React.FC = () => {
   const [jobs, setJobs] = useState<Array<Job>>([])
+  const [jobReceip, setJobReceip] = useState<Array<Job>>([])
 
   const fethJobs = useCallback(async () => {
     try {
       const res = await getAllVacancies()
       if (res.error) alert('Something went bad')
+      const receip = res.data.map(item => ({
+        id: item.id,
+        avatar: item.user?.photoUrl,
+        title: item.functionType?.designation,
+        salary: item.salary,
+        comapany: item.company?.designation,
+        time: item.createdAt
+      }))
 
-      setJobs(
-        res.data.map(item => ({
-          id: item.id,
-          avatar: '/img/pic.jpeg',
-          title: item.functionType?.designation,
-          salary: item.salary,
-          comapany: item.company?.designation,
-          time: item.createdAt
-        }))
-      )
+      setJobs(receip)
+      setJobReceip(receip)
     } catch (error) {}
   }, [])
 
   useEffect(() => {
     fethJobs()
-  }, [])
+  }, [fethJobs])
+
+  const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const { value } = ev.target
+    const newJobs = jobReceip.filter(
+      item =>
+        item?.comapany
+          ?.toLocaleLowerCase()
+          .includes(value.toLocaleLowerCase()) ||
+        item?.time?.toLocaleLowerCase().includes(value.toLocaleLowerCase()) ||
+        item?.salary?.toLocaleLowerCase().includes(value.toLocaleLowerCase()) ||
+        item?.title?.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+    )
+
+    setJobs(newJobs)
+  }
 
   return (
     <div>
@@ -63,7 +65,7 @@ const Home: React.FC = () => {
           <div className="flex justify-between">
             <div>
               <h1 style={{ fontSize: '25px' }} className="font-bold text-black">
-                UI/UX Design
+                Vagas
               </h1>
               <small>{jobs.length} vagas de emprego</small>
             </div>
@@ -91,6 +93,15 @@ const Home: React.FC = () => {
             </button>
           </div>
         </div>
+        <TextField
+          id="search"
+          name="search"
+          type="text"
+          required
+          onChange={handleChange}
+          className="appearance-none rounded relative block w-full px-3 mb-5 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          placeholder="Pesquisar vaga"
+        />
       </header>
       {jobs.length === 0 && 'loaing'}
       <VagasList>

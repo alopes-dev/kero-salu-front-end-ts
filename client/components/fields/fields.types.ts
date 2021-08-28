@@ -11,6 +11,7 @@ export type TextFieldProps = {
   id: string
   required: boolean
   className?: string
+  value?: any
   onChange?: (e) => void
 }
 

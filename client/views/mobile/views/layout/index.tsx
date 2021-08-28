@@ -1,16 +1,43 @@
-import { FC, Fragment, useContext } from 'react'
+import { FC, Fragment, useCallback, useContext, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 import { Navigation, Profile } from './pages.conf'
 import { AuthContext } from '@contexts/auth'
 import { useRouter } from 'next/router'
+import { getSolicitation } from '@services/solicitation'
+import { getNotificationsByDistination } from '@services/notifications'
+import { useAsyncState } from 'just-hook'
 
 type LayoutMobileProps = {
   title: string
 }
+
+const styles = {
+  position: 'absolute',
+  top: 0,
+  color: '#de6565',
+  right: 0
+}
 const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
   const { user, signOut } = useContext(AuthContext)
   const { push } = useRouter()
+  const { setData, data } = useAsyncState<Array<any>>()
+  const fetchNotifications = useCallback(async () => {
+    if (user) {
+      const { data: solicitations } = await getSolicitation(user.personId)
+
+      const { data: notifications } = await getNotificationsByDistination(
+        user.personId
+      )
+
+      setData([...solicitations, ...notifications])
+    }
+  }, [user])
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [fetchNotifications])
+
   return (
     <div>
       <Disclosure
@@ -82,7 +109,10 @@ const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user?.avatarUrl || '/img/pic.jpeg'}
+                      src={
+                        `http://localhost:5500/files/${user?.avatarUrl}` ||
+                        '/img/pic.jpeg'
+                      }
                       alt="user-picture"
                     />
                   </div>
@@ -99,9 +129,25 @@ const LayoutMobile: FC<LayoutMobileProps> = ({ children, title }) => {
                       {user?.email}
                     </div>
                   </div>
-                  <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                  <button
+                    style={{ position: 'relative' }}
+                    onClick={() => {
+                      push('/mobile/notifications')
+                    }}
+                    className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
+                    <small
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        color: '#de6565',
+                        right: 0
+                      }}
+                    >
+                      {data?.length}
+                    </small>
                   </button>
                 </div>
                 <div className="mt-3 px-2 space-y-1">

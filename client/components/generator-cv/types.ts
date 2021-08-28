@@ -16,3 +16,12 @@ export type ExperienceProps = {
 export type GeneratorCVProps = {
   candidate: IPersonAttributes
 }
+
+type GetReturnValue = {
+  description: string
+  documentTypeId: string
+}
+
+export type SolicitationFormProps = {
+  gettersValue(data: GetReturnValue): void
+}

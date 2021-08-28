@@ -29,7 +29,6 @@ const FieldSelectable: FC<FieldSelectableProps> = ({
     return valueSelected.value
   }
 
-  console.log(style)
   return (
     <div style={style}>
       <label htmlFor={labelName} className={labelName ? '' : 'sr-only'}>

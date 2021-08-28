@@ -1,13 +1,17 @@
 import styled from 'styled-components'
 
+type MnuItemType = {
+  active: boolean
+}
+
 export const Content = styled.div`
   display: flex;
-
+  height: 500px;
   /* align-items: center; */
 `
 
 export const MenuContainer = styled.div`
-  width: 20%;
+  width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,35 +22,59 @@ export const MenuContainer = styled.div`
 export const Menu = styled.div`
   width: 100%;
   display: flex;
+  padding: 5%;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 `
 
-export const MenuItem = styled.div`
+export const MenuItem = styled.div<MnuItemType>`
   width: 100%;
-  height: 40px;
+  height: 45px;
   padding: 10px 20px;
   cursor: pointer;
-  border-top: 1px solid #dcdcdc;
+  /* border-top: 1px solid #dcdcdc; */
   display: flex;
-  svg {
+  align-items: center;
+  color: ${props => (props.active ? ' white' : ' #333')};
+  border-radius: 0.5rem;
+  > svg {
     font-size: 20px;
-    color: #333;
+    color: ${props => (props.active ? ' white' : ' #333')} !important;
     margin-right: 10px;
   }
 `
 
 export const UserAvatar = styled.div`
-  width: 90px;
-  height: 90px;
+  width: 120px;
+  height: 120px;
   display: flex;
   justify-content: center;
   margin-top: 30px;
   margin-bottom: 10px;
   padding: 3px;
-  img {
+  > div.image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
+    padding: 5px;
+    > img {
+      border-radius: 50%;
+      background-size: cover;
+    }
+    svg {
+      background-color: rgb(57 60 72);
+      border-radius: 50%;
+      color: white;
+      position: absolute;
+      cursor: pointer;
+      left: 90%;
+      top: 65%;
+      transform: translate(-50%, -50%);
+      font-size: 19px;
+      z-index: 99;
+    }
   }
 `
 

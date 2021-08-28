@@ -9,6 +9,7 @@ import {
   Items
 } from './style'
 import { ItemsJobProps } from './types'
+import { getNumberOfDays } from './views/notifications'
 
 const ItemsJobs: React.FC<ItemsJobProps> = ({ job, active }) => {
   const { push } = useRouter()
@@ -22,7 +23,7 @@ const ItemsJobs: React.FC<ItemsJobProps> = ({ job, active }) => {
       key={job.id}
     >
       <CompanyImage>
-        <img src={job.avatar} alt={`${job.title}${job.id}`} />
+        <img src={`http://localhost:5500/files/${job.avatar}`} alt={'Tet'} />
       </CompanyImage>
       <CompanyInfoContainer>
         <CompanyContent active={active}>
@@ -40,7 +41,7 @@ const ItemsJobs: React.FC<ItemsJobProps> = ({ job, active }) => {
           <span onClick={() => {}}>
             <IoHeartOutline size={19} />
           </span>
-          <small>3d</small>
+          <small>{getNumberOfDays(`${job.time}`)}d</small>
         </ContentIcon>
       </CompanyInfoContainer>
     </Items>

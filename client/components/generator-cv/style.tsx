@@ -265,3 +265,35 @@ export const ListItem = styled.h5`
   font-weight: 200;
   color: #525252;
 `
+export const DocumentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+export const Document = styled.div`
+  background-color: rgba(54, 59, 76, 0.9) !important;
+  height: 50px;
+  width: 100%;
+  border-radius: 0.5rem;
+  margin: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > span {
+    color: white;
+    font-size: 14px;
+    margin: 10px 1% 0 1%;
+    flex-basis: calc(25% - 2%);
+    display: flex;
+    justify-content: center;
+    svg {
+      font-size: 22px;
+      color: white;
+      margin-right: 8px;
+      cursor: pointer;
+      :hover {
+        color: #221b42;
+      }
+    }
+  }
+`

@@ -10,6 +10,8 @@ import {
 import { api } from '../services/api'
 import { SignInData, User } from '../../types/user'
 import useIsMounted from '@client/hooks/use-is-mounted'
+import { getNotificationsByOriginOrDistinationId } from '@services/notifications'
+import { INotificationAttributes } from '@itypes/index'
 
 type AuthContextType = {
   isAuthenticated: boolean
@@ -17,6 +19,8 @@ type AuthContextType = {
   signIn: (data: SignInData) => Promise<void>
   resetPassword: (data: Omit<SignInData, 'provider'>) => Promise<void>
   signOut(): void
+  setUser(userInfo: User): void
+  notifiers: Array<INotificationAttributes>
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -25,14 +29,13 @@ export function AuthProvider({ children }) {
   const { push, reload } = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const isMounted = useIsMounted()
-
+  const [notifiers, setNotifiers] = useState<Array<INotificationAttributes>>()
   const isAuthenticated = !!user
 
   const handleRecoverUserInfo = useCallback(async () => {
     const { 'nextauth.token': token } = parseCookies()
     if (token) {
       const response = await recoverUserInformation(token)
-
       if (isMounted.current) setUser(response.user)
     }
   }, [isMounted])
@@ -52,6 +55,7 @@ export function AuthProvider({ children }) {
     if (typeof res === 'string') throw new Error(res)
 
     const { token, user } = res
+
     if (!token) throw new Error('Sem autorização.')
 
     setCookie(undefined, 'nextauth.token', token, {
@@ -59,7 +63,7 @@ export function AuthProvider({ children }) {
     })
 
     api.defaults.headers['Authorization'] = `Bearer ${token}`
-    user['id'] = user.companyId
+
     setUser(user)
 
     const path = provider === 1 ? '/mobile' : '/dashboard'
@@ -84,9 +88,28 @@ export function AuthProvider({ children }) {
     reload()
   }
 
+  const fetchNotifications = useCallback(async () => {
+    if (user?.companyId) {
+      const res = await getNotificationsByOriginOrDistinationId(user.companyId)
+      setNotifiers(res.data)
+    }
+  }, [user])
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [fetchNotifications])
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, signIn, resetPassword, signOut }}
+      value={{
+        user,
+        notifiers,
+        setUser,
+        isAuthenticated,
+        signIn,
+        resetPassword,
+        signOut
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -23,10 +23,13 @@ const AsideMenu: FC = () => {
         <Hr className="mt-5" />
         <div className="flex">
           <UserAvatar>
-            <Image
+            <img
               width={70}
               height={70}
-              src={user?.avatarUrl || '/img/pic.jpeg'}
+              src={
+                `http://localhost:5500/files/${user?.avatarUrl}` ||
+                '/img/pic.jpeg'
+              }
               alt="user-picture"
             />
           </UserAvatar>

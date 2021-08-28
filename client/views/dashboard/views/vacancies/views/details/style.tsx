@@ -173,6 +173,9 @@ export const Avatar = styled.div`
     font-weight: 600;
     color: white;
   }
+  > img {
+    border-radius: 50%;
+  }
 `
 export const Status = styled.div<StatusPorps>`
   width: 45px;

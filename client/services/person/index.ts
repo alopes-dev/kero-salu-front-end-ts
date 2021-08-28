@@ -77,7 +77,9 @@ export const postPerson = async (
   }
 }
 
-export const updatePerson = async (formData: IPersonData): Promise<string> => {
+export const updatePerson = async (
+  formData: IPersonData
+): Promise<HttpResponse<{ id: string }>> => {
   try {
     const res = await api.post('/graphql', {
       query: patchPerson,
@@ -86,11 +88,20 @@ export const updatePerson = async (formData: IPersonData): Promise<string> => {
       }
     })
 
-    const { data } = res.data
+    const { data, errors } = res.data
 
-    return data!['UpdatePerson']
+    if (errors) throw new Error(errors[0]?.message || 'Ocorreu algum erro')
+    return {
+      data: data['UpdatePerson'] as { id: string },
+      error: false,
+      message: 'Success'
+    }
   } catch (error) {
-    return error.message
+    return {
+      data: null,
+      error: true,
+      message: error.message
+    }
   }
 }
 

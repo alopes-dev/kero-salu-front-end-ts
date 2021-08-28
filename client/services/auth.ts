@@ -10,6 +10,7 @@ const GQL = `mutation($input: SessionInput){
   StoreSession(input: $input){
     token
     user{
+      id
       userName
       email
       avatarUrl

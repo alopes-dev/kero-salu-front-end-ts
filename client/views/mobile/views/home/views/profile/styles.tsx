@@ -78,6 +78,7 @@ export const UserInfoContainer = styled.div`
   color: #fff;
   margin-top: 20px;
   > div.image-container {
+    position: relative;
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -86,6 +87,17 @@ export const UserInfoContainer = styled.div`
     > img {
       border-radius: 50%;
       background-size: cover;
+    }
+    svg {
+      background-color: #333;
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+      left: 93%;
+      top: 70%;
+      transform: translate(-50%, -50%);
+      font-size: 19px;
+      z-index: 99;
     }
   }
   > h1 {

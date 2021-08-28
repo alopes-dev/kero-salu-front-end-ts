@@ -18,7 +18,6 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { FC } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { useForm } from 'react-hook-form'
 import { toastErrorProps, toastSuccessProps } from '@constants/index'
 import { formateDate } from '@components/generator-cv/vacancies-list'
 
@@ -49,6 +48,7 @@ const VacanciesDetails: FC<VacanciesDetailProps> = ({ vacancie }) => {
       style={{ margin: '10px' }}
       className="bg-white shadow overflow-hidden sm:rounded-lg"
     >
+      <Toaster />
       <DeleteModal
         title="Deseja eliminar essa vaga?"
         isOpen={isOpen}

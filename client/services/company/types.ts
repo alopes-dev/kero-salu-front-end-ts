@@ -3,8 +3,9 @@ export interface ICompanyData {
   designation: string
   nif: string
   phone: string
-  email: string
-  password: string
+  email?: string
+  password?: string
   vision?: string
   mission?: string
+  userName?: string
 }

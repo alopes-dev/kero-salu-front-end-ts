@@ -1,6 +1,6 @@
 import { VacanceContext } from '@contexts/vacancie'
 import { IVacanciesAttributes } from '@itypes/index'
-import React from 'react'
+import React, { ChangeEvent, useRef } from 'react'
 import { useEffect } from 'react'
 import { useContext } from 'react'
 import AnaliticsView from './analitics'

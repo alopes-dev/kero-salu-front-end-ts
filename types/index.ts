@@ -20,6 +20,21 @@ export interface ISkillAttributes extends ITimestamp {
   candidateId?: string
 }
 
+export interface IDocumentAttributes extends ITimestamp {
+  id?: string
+  designation: string
+}
+
+export interface ISolicitationAttributes extends ITimestamp {
+  id?: string
+  description?: string
+  documentTypeId?: string
+  candidateId?: string
+  fileUrl?: string
+  candidature?: ICandidatureAttributes
+  candidatureId?: string
+  documentType?: IDocumentAttributes
+}
 export interface IHobbesAttributes extends ITimestamp {
   id?: string
   designation: string
@@ -65,6 +80,7 @@ export interface ICandidatureAttributes extends ITimestamp {
   id?: string
   candidateId: string
   vacanciesId: string
+  vacance?: IVacanciesAttributes
   isAnalized?: Number
   candidate: IPersonAttributes
   status?: number
@@ -125,6 +141,15 @@ export interface IPersonLanguageAttribute extends ITimestamp {
   languages: ILanguageAttribute
 }
 
+export interface INotificationAttributes extends ITimestamp {
+  id?: string
+  description?: string
+  origin: string
+  status: string
+  distination: string
+  action: string
+  company: ICompanyAttributes
+}
 export interface IContactAttributes extends ITimestamp {
   phone: string
   email: string

@@ -44,6 +44,10 @@ query{Person(id: "${id}") {
 	  id
     designation
 	}
+  user {
+    id
+   photoUrl
+  }
   curses{
     id
     untillNow
@@ -100,6 +104,7 @@ query{CandidatureByVacanciesId(id:"${id}"){
       user {
         id
         email
+        photoUrl
       }
     }
   }

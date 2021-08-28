@@ -10,6 +10,7 @@ export const VacanciesList = `query{VacanciesList {
   nationalityId
   experience
   numVacancies
+  user{photoUrl}
   functionType{
     id
     designation

@@ -10,16 +10,17 @@ import { getPersonFromVacance } from '@services/person'
 import { AuthContext } from '@contexts/auth'
 import { useState } from 'react'
 import { IPersonAttributes } from '@itypes/index'
+import FilterForm from './filter'
 //`${candidate.firstName} ${candidate.lastName}`
 
-const candidateParser = (candidates: Array<IPersonAttributes>) => {
+export const candidateParser = (candidates: Array<IPersonAttributes>) => {
   return candidates?.map(candidate => ({
     ...candidate,
     name: (
       <Profile
         name={`${candidate.firstName} ${candidate.lastName}`}
         info={`${candidate.user.email}`}
-        image="/img/pic.jpeg"
+        image={`http://localhost:5500/files/${candidate?.user?.photoUrl}`}
       />
     ),
     age: candidate.birthDate
@@ -30,10 +31,14 @@ const Candidates: FC = () => {
   const { push } = useRouter()
   const { user } = useContext(AuthContext)
   const [candidates, setCandidates] = useState<Array<IPersonAttributes>>()
+  const [dataFilter, setDataDFilter] = useState<Array<any>>()
 
   const fetchPersonFromVacance = useCallback(async () => {
-    const res = await getPersonFromVacance(user?.companyId)
-    setCandidates(candidateParser(res) || [])
+    if (user) {
+      const res = await getPersonFromVacance(user?.companyId)
+      setCandidates(candidateParser(res) || [])
+      setDataDFilter(res || [])
+    }
   }, [user])
 
   useEffect(() => {
@@ -44,8 +49,10 @@ const Candidates: FC = () => {
     <Card classNames="bg-white shadow rounded-lg lg:pt-5 sm:px-6 lg:px-0">
       <div
         className="lg:flex lg:flex-end lg:flex-end px-4 pb-4"
-        style={{ justifyContent: 'flex-end' }}
-      ></div>
+        style={{ justifyContent: 'space-between' }}
+      >
+        <FilterForm data={dataFilter || []} triggerEvent={setCandidates} />
+      </div>
 
       <GenericTable
         onShow={data => {

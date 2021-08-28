@@ -84,13 +84,13 @@ const CandidateListView: React.FC = () => {
               <Candidate key={i}>
                 <div className="user-info">
                   {candidate.user?.photoUrl ? (
-                    <div className="avatar avatar-online">
+                    <Avatar>
                       <img
-                        src="./img/profile.jpg"
+                        src={`http://localhost:5500/files/${candidate?.user?.photoUrl}`}
                         alt="...i"
                         className="avatar-img rounded-circle"
                       />
-                    </div>
+                    </Avatar>
                   ) : (
                     <Avatar>
                       <span>
